@@ -16,6 +16,14 @@ class ValidateTest {
         validate = new Validate();
     }
 
+    @DisplayName("주문한 메뉴의 개수가 조건에 맞지 않는 경우")
+    @ParameterizedTest
+    @ValueSource(ints = {-1, -100})
+    void 주문_개수_테스트(int orderNumber) {
+        assertThatThrownBy(() -> validate.menuOrderNumberValidate(orderNumber))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
     @DisplayName("메뉴판에 주문한 메뉴가 존재하지 않는 경우")
     @ParameterizedTest
     @ValueSource(strings = {"지로콜라", "케이크", "치킨", "피자"})

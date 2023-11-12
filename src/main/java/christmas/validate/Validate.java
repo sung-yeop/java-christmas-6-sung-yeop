@@ -8,6 +8,18 @@ import christmas.domain.MainMenu;
 
 public class Validate {
     public static final String errorMessage = "[ERROR]";
+    public static final int MIN = 1;
+
+    public static void menuOrderNumberValidate(int orderNumber) {
+        try {
+            if (orderNumber < MIN) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(errorMessage);
+            throw new IllegalArgumentException();
+        }
+    }
 
     public static void menuValidate(String menuName) {
         try {
