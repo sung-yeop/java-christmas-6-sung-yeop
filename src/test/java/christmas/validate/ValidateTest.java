@@ -19,6 +19,20 @@ class ValidateTest {
         validate = new Validate();
     }
 
+    @DisplayName("주문한 메뉴 형식이 올바르지 않은 경우")
+    @ParameterizedTest
+    @ValueSource(strings = {"초코케이크-1,초코무스-2,피자-3,치킨-5,치킨0912"})
+    void 메뉴_포맷_X(String orderMenu) {
+        assertThatThrownBy(() -> validate.menuFormatValidate(orderMenu)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("주문한 메뉴 형식이 올바른 경우")
+    @ParameterizedTest
+    @ValueSource(strings = {"초코케이크-1,초코무스-2,피자-3,치킨-5"})
+    void 메뉴_포맷_O(String orderMenu) {
+        assertThatNoException().isThrownBy(() -> validate.menuFormatValidate(orderMenu));
+    }
+
     @DisplayName("주문한 메뉴에 중복된 내용이 존재하는 경우")
     @Test
     void 메뉴_중복_O() {

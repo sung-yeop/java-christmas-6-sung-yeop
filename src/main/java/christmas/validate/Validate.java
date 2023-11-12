@@ -3,12 +3,26 @@ package christmas.validate;
 import christmas.constants.Constants;
 import christmas.domain.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Validate {
     public static final String errorMessage = "[ERROR]";
     public static final int MIN = 1;
+    public static final String menuInputPattern = "(([가-힣]*)-[0-9]*)";
+
+    public static void menuFormatValidate(String order) {
+        List<String> orderList = Arrays.stream(order.split(",")).toList();
+        try {
+            if (!orderList.stream().allMatch(s -> s.matches(menuInputPattern))) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(errorMessage);
+            throw new IllegalArgumentException();
+        }
+    }
 
     public static void menuDuplicationValidate(List<Menu> menuName) {
         try {
