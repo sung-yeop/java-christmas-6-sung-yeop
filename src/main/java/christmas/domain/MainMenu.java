@@ -1,10 +1,8 @@
 package christmas.domain;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public enum MainMenu {
+public enum MainMenu implements Menu {
 
     STAKE("티본스테이크", 55000),
     LEAF("바비큐립", 54000),
@@ -28,7 +26,7 @@ public enum MainMenu {
         this.price = price;
     }
 
-    public static int getPriceWithName(String name){
+    public static int getPriceWithName(String name) {
         return Arrays.stream(MainMenu.values()).filter(MainMenu -> MainMenu.name.equals(name)).findAny()
                 .orElse(NONE).getPrice();
     }

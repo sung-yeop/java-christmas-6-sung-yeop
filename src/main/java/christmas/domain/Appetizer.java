@@ -1,11 +1,8 @@
 package christmas.domain;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-public enum Appetizer {
+public enum Appetizer implements Menu {
 
     SOUP("양송이수프", 6000),
     TAPAS("타파스", 5500),
@@ -21,11 +18,11 @@ public enum Appetizer {
         this.price = price;
     }
 
-    public int getPrice(){
+    public int getPrice() {
         return price;
     }
 
-    public static int getPriceWithName(String name){
+    public static int getPriceWithName(String name) {
         return Arrays.stream(Appetizer.values()).filter(Appetizer -> Appetizer.name.equals(name)).findAny().
                 orElse(NONE).getPrice();
     }
