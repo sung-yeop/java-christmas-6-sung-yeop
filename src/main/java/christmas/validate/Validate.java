@@ -1,14 +1,25 @@
 package christmas.validate;
 
 import christmas.constants.Constants;
-import christmas.domain.Appetizer;
-import christmas.domain.DesertMenu;
-import christmas.domain.DrinkMenu;
-import christmas.domain.MainMenu;
+import christmas.domain.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Validate {
     public static final String errorMessage = "[ERROR]";
     public static final int MIN = 1;
+
+    public static void menuDuplicationValidate(List<Menu> menuName) {
+        try {
+            if (menuName.stream().distinct().collect(Collectors.toList()).size() != menuName.size()) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(errorMessage);
+            throw new IllegalArgumentException();
+        }
+    }
 
     public static void menuOrderNumberValidate(int orderNumber) {
         try {

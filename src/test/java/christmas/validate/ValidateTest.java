@@ -2,8 +2,11 @@ package christmas.validate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,10 +19,33 @@ class ValidateTest {
         validate = new Validate();
     }
 
+    @DisplayName("주문한 메뉴에 중복된 내용이 존재하는 경우")
+    @Test
+    void 메뉴_중복_O() {
+        //given
+        List duplicateList = List.of("티본스테이크", "제로콜라", "제로콜라");
+
+        //when, then
+        assertThatThrownBy(() -> validate.menuDuplicationValidate(duplicateList))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("주문한 메뉴에 중복된 내용이 존재하지 않는 경우")
+    @Test
+    void 메뉴_중복_X() {
+        //given
+        List notDuplicateList = List.of("티본스테이크", "제로콜라", "초코케이크");
+
+        //when, then
+        assertThatNoException().isThrownBy(() -> validate.menuDuplicationValidate(notDuplicateList));
+    }
+
+
     @DisplayName("주문한 메뉴의 개수가 조건에 맞지 않는 경우")
     @ParameterizedTest
     @ValueSource(ints = {-1, -100})
     void 주문_개수_테스트(int orderNumber) {
+
         assertThatThrownBy(() -> validate.menuOrderNumberValidate(orderNumber))
                 .isInstanceOf(IllegalArgumentException.class);
     }
