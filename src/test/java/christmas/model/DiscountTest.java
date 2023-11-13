@@ -1,5 +1,6 @@
 package christmas.model;
 
+import christmas.domain.DrinkMenu;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,13 @@ class DiscountTest {
     @BeforeEach
     void setDiscount() {
         discount = new Discount();
+    }
+
+    @DisplayName("사용자가 할인 전 구매한 총 비용이 12만원 이상일 경우 샴페인 스트링을 반환")
+    @ParameterizedTest
+    @ValueSource(ints = {120000, 20000000})
+    void 샴페인_증정_테스트(int orderAmount) {
+        Assertions.assertThat(discount.eventChampagne(orderAmount)).isEqualTo(DrinkMenu.CHAMPAGNE.getName());
     }
 
     @DisplayName("사용자가 입력한 날짜가 공휴일이면 1000원 할인 / 외에는 0원 반환")

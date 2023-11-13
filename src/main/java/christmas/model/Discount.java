@@ -1,6 +1,7 @@
 package christmas.model;
 
 import christmas.domain.DesertMenu;
+import christmas.domain.DrinkMenu;
 import christmas.domain.Holiday;
 import christmas.domain.MainMenu;
 
@@ -18,7 +19,14 @@ public class Discount {
     private final static int DISCOUNT = 2023;
     private final static int STARTDISCOUNT = 1000;
     private final static int NOTDISCOUNT = 0;
+    private final static int CHAMPAGNEEVENT = 120000;
 
+    public String eventChampagne(int orderAmount) {
+        if (orderAmount >= CHAMPAGNEEVENT) {
+            return DrinkMenu.CHAMPAGNE.getName();
+        }
+        return null;
+    }
 
     public int discountStar(int date) {
         if (Arrays.stream(Holiday.values()).anyMatch(i -> i.getDate() == date)) {
