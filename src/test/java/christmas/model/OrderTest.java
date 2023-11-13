@@ -25,7 +25,7 @@ class OrderTest {
 
     @Test
     void 할인_전_구입_금액_반환() {
-        Assertions.assertThat(order.accountAmount())
+        Assertions.assertThat(order.orderAmount())
                 .isEqualTo(DesertMenu.CAKE.getPrice() * 3 + DrinkMenu.CHAMPAGNE.getPrice() * 5);
     }
 
