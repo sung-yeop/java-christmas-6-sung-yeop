@@ -25,7 +25,7 @@ public class Order {
         return orderMenu;
     }
 
-    public int accountAmount() {
+    public int orderAmount() {
         int amount = 0;
         for (String input : orderMenu.keySet()) {
             amount += menuPrice(input) * orderMenu.get(input);
@@ -41,4 +41,6 @@ public class Order {
         amount += MainMenu.getPriceWithName(key);
         return amount;
     }
+
+
 }
