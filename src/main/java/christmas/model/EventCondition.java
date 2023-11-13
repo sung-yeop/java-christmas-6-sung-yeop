@@ -7,9 +7,10 @@ import java.util.Map;
 public class EventCondition {
 
     private final static int CONDITION = 10000;
+    private final static int ORDERCOUNTCONDITION = 20;
 
     public boolean checkEventConditionAmount(int orderAmount) {
-        if (orderAmount > CONDITION) {
+        if (orderAmount >= CONDITION) {
             return true;
         }
         return false;
@@ -17,6 +18,13 @@ public class EventCondition {
 
     public boolean checkEventConditionMenu(Map<String, Integer> orderMenu) {
         if (orderMenu.keySet().stream().filter(DrinkMenu::checkMenu).allMatch(b -> b.equals(true))) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkEventConditionMenuCount(Map<String, Integer> orderMenu) {
+        if (orderMenu.values().stream().mapToInt(Integer::intValue).sum() > ORDERCOUNTCONDITION) {
             return false;
         }
         return true;
