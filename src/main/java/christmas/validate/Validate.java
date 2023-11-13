@@ -16,6 +16,7 @@ public class Validate {
     private static final String menuInputPattern = "(([가-힣]*)-[0-9]*)";
     private static final String integerPattern = "([0-9]*)";
     private static final String delimeterPattern = "(-[0-9]*.)";
+    private static final String delimeterNamePattern = "([가-힣]*-)";
 
 
     public static void integerTypeValidate(String number) {
@@ -53,21 +54,36 @@ public class Validate {
         }
     }
 
-    public static void menuOrderNumberValidate(int orderNumber) {
+    public static void menuOrderNumberValidate(String order) {
+        List<Integer> orderNumbers = replaceStringToCount(order);
         try {
-            if (orderNumber < MIN) {
-                throw new IllegalArgumentException();
+            for (Integer orderNumber : orderNumbers) {
+                checkNumber(orderNumber);
             }
+
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
         }
     }
 
-    public static void menuValidate(String menuName) {
+    private static void checkNumber(Integer orderNumber) {
+        if (orderNumber < MIN) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private static List<Integer> replaceStringToCount(String order) {
+        return Arrays.stream(order.replaceAll(delimeterNamePattern, ",").split(","))
+                .map(Integer::parseInt).collect(Collectors.toList());
+    }
+
+    public static void menuValidate(String order) {
+        List<String> menuName = replaceStringToName(order);
         try {
-            checkMenu(menuName);
-            ;
+            for (String input : menuName) {
+                checkMenu(input);
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();

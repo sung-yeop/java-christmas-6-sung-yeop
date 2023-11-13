@@ -63,10 +63,9 @@ class ValidateTest {
 
     @DisplayName("주문한 메뉴의 개수가 조건에 맞지 않는 경우")
     @ParameterizedTest
-    @ValueSource(ints = {-1, -100})
-    void 주문_개수_테스트(int orderNumber) {
-
-        assertThatThrownBy(() -> validate.menuOrderNumberValidate(orderNumber))
+    @ValueSource(strings = {"초코케이크-1,초코무스-2,피자-3,치킨-5,피자-5"})
+    void 주문_개수_테스트(String order) {
+        assertThatThrownBy(() -> validate.menuOrderNumberValidate(order))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
