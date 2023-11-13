@@ -4,7 +4,7 @@ import christmas.domain.DrinkMenu;
 
 import java.util.Map;
 
-public class EventCondition {
+public class Condition {
 
     private final static int CONDITION = 10000;
     private final static int ORDERCOUNTCONDITION = 20;
