@@ -30,4 +30,7 @@ public enum DrinkMenu implements Menu {
                 .orElse(NONE).getPrice();
     }
 
+    public static boolean checkMenu(String menuName) {
+        return Arrays.stream(DrinkMenu.values()).noneMatch(drinkMenu -> drinkMenu.getName().equals(menuName));
+    }
 }
