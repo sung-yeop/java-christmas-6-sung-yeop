@@ -2,11 +2,8 @@ package christmas.validate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -49,24 +46,18 @@ class ValidateTest {
     }
 
     @DisplayName("주문한 메뉴에 중복된 내용이 존재하는 경우")
-    @Test
-    void 메뉴_중복_O() {
-        //given
-        List duplicateList = List.of("티본스테이크", "제로콜라", "제로콜라");
-
-        //when, then
-        assertThatThrownBy(() -> validate.menuDuplicationValidate(duplicateList))
+    @ParameterizedTest
+    @ValueSource(strings = {"초코케이크-1,초코무스-2,피자-3,치킨-5,피자-5"})
+    void 메뉴_중복_O(String order) {
+        assertThatThrownBy(() -> validate.menuDuplicationValidate(order))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("주문한 메뉴에 중복된 내용이 존재하지 않는 경우")
-    @Test
-    void 메뉴_중복_X() {
-        //given
-        List notDuplicateList = List.of("티본스테이크", "제로콜라", "초코케이크");
-
-        //when, then
-        assertThatNoException().isThrownBy(() -> validate.menuDuplicationValidate(notDuplicateList));
+    @ParameterizedTest
+    @ValueSource(strings = {"초코케이크-1,초코무스-2,피자-3,치킨-5"})
+    void 메뉴_중복_X(String order) {
+        assertThatNoException().isThrownBy(() -> validate.menuDuplicationValidate(order));
     }
 
 

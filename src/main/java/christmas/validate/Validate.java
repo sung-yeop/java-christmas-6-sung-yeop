@@ -1,17 +1,22 @@
 package christmas.validate;
 
 import christmas.constants.Constants;
-import christmas.domain.*;
+import christmas.domain.Appetizer;
+import christmas.domain.DesertMenu;
+import christmas.domain.DrinkMenu;
+import christmas.domain.MainMenu;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Validate {
-    public static final String errorMessage = "[ERROR]";
-    public static final int MIN = 1;
-    public static final String menuInputPattern = "(([가-힣]*)-[0-9]*)";
+    private static final String errorMessage = "[ERROR]";
+    private static final int MIN = 1;
+    private static final String menuInputPattern = "(([가-힣]*)-[0-9]*)";
     private static final String integerPattern = "([0-9]*)";
+    private static final String delimeterPattern = "(-[0-9]*.)";
+
 
     public static void integerTypeValidate(String number) {
         try {
@@ -36,7 +41,8 @@ public class Validate {
         }
     }
 
-    public static void menuDuplicationValidate(List<Menu> menuName) {
+    public static void menuDuplicationValidate(String order) {
+        List<String> menuName = replaceStringToName(order);
         try {
             if (menuName.stream().distinct().collect(Collectors.toList()).size() != menuName.size()) {
                 throw new IllegalArgumentException();
@@ -88,6 +94,11 @@ public class Validate {
         if (visitDate > Constants.MAXDATE || visitDate < Constants.MINDATE) {
             throw new IllegalArgumentException();
         }
+    }
+
+    private static List<String> replaceStringToName(String order) {
+        return Arrays.stream(order.replaceAll(delimeterPattern, ",").split(","))
+                .collect(Collectors.toList());
     }
 
 }
