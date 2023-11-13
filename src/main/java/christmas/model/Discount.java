@@ -1,6 +1,7 @@
 package christmas.model;
 
 import christmas.domain.DesertMenu;
+import christmas.domain.Holiday;
 import christmas.domain.MainMenu;
 
 import java.util.Arrays;
@@ -15,7 +16,16 @@ public class Discount {
     private final static int BASICDISCOUNT = 1000;
     private final static int PERIOD = 7;
     private final static int DISCOUNT = 2023;
+    private final static int STARTDISCOUNT = 1000;
+    private final static int NOTDISCOUNT = 0;
 
+
+    public int discountStar(int date) {
+        if (Arrays.stream(Holiday.values()).anyMatch(i -> i.getDate() == date)) {
+            return STARTDISCOUNT;
+        }
+        return NOTDISCOUNT;
+    }
 
     public int discountChristmas(int date) {
         int result = 0;

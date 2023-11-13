@@ -1,17 +1,38 @@
 package christmas.model;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class DiscountTest {
+
+    private static final int HOLIDAYDISCOUNT = 1000;
+
+    private Discount discount;
+
+    @BeforeEach
+    void setDiscount() {
+        discount = new Discount();
+    }
+
+    @DisplayName("사용자가 입력한 날짜가 공휴일이면 1000원 할인 / 외에는 0원 반환")
+    @ParameterizedTest
+    @ValueSource(ints = {3, 25, 24, 31})
+    void 공휴일_할인_테스트(int date) {
+        assertEquals(discount.discountStar(date), HOLIDAYDISCOUNT);
+    }
+
 
     @DisplayName("사용자가 입력한 날짜에 따른 메뉴 할인 테스트")
     @Test
     void 할인_테스트() {
-        Discount discount = new Discount();
         Map<String, Integer> mainMenuDiscount = discount.discountDay(30);
         Map<String, Integer> desertMenuDiscount = discount.discountDay(29);
 
