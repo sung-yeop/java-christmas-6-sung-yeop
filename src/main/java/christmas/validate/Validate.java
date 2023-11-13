@@ -13,17 +13,16 @@ import java.util.stream.Collectors;
 public class Validate {
     private static final String errorMessage = "[ERROR]";
     private static final int MIN = 1;
+    private static final int MENUMAXCOUNT = 20;
     private static final String menuInputPattern = "(([가-힣]*)-[0-9]*)";
     private static final String integerPattern = "([0-9]*)";
     private static final String delimeterPattern = "(-[0-9]*.)";
-    private static final String delimeterNamePattern = "([가-힣]*-)";
+    private static final String delimeterNamePattern = "(.[가-힣]+-)";
 
 
     public static void integerTypeValidate(String number) {
         try {
-            if (!number.matches(integerPattern)) {
-                throw new IllegalArgumentException();
-            }
+            checkSum(!number.matches(integerPattern));
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
@@ -45,9 +44,7 @@ public class Validate {
     public static void menuDuplicationValidate(String order) {
         List<String> menuName = replaceStringToName(order);
         try {
-            if (menuName.stream().distinct().collect(Collectors.toList()).size() != menuName.size()) {
-                throw new IllegalArgumentException();
-            }
+            checkSum(menuName.stream().distinct().collect(Collectors.toList()).size() != menuName.size());
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
@@ -56,10 +53,13 @@ public class Validate {
 
     public static void menuOrderNumberValidate(String order) {
         List<Integer> orderNumbers = replaceStringToCount(order);
+        int sum = 0;
         try {
             for (Integer orderNumber : orderNumbers) {
+                sum += orderNumber;
                 checkNumber(orderNumber);
             }
+            checkSum(sum > MENUMAXCOUNT);
 
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
@@ -67,15 +67,14 @@ public class Validate {
         }
     }
 
-    private static void checkNumber(Integer orderNumber) {
-        if (orderNumber < MIN) {
+    private static void checkSum(boolean sum) {
+        if (sum) {
             throw new IllegalArgumentException();
         }
     }
 
-    private static List<Integer> replaceStringToCount(String order) {
-        return Arrays.stream(order.replaceAll(delimeterNamePattern, ",").split(","))
-                .map(Integer::parseInt).collect(Collectors.toList());
+    private static void checkNumber(Integer orderNumber) {
+        checkSum(orderNumber < MIN);
     }
 
     public static void menuValidate(String order) {
@@ -91,10 +90,8 @@ public class Validate {
     }
 
     private static void checkMenu(String menuName) {
-        if (Appetizer.getPriceWithName(menuName) == 0 && DesertMenu.getPriceWithName(menuName) == 0
-                && DrinkMenu.getPriceWithName(menuName) == 0 && MainMenu.getPriceWithName(menuName) == 0) {
-            throw new IllegalArgumentException();
-        }
+        checkSum(Appetizer.getPriceWithName(menuName) == 0 && DesertMenu.getPriceWithName(menuName) == 0
+                && DrinkMenu.getPriceWithName(menuName) == 0 && MainMenu.getPriceWithName(menuName) == 0);
     }
 
     public static void visitDateValidate(int visitDate) {
@@ -107,14 +104,18 @@ public class Validate {
     }
 
     private static void checkVisitDate(int visitDate) {
-        if (visitDate > Constants.MAXDATE || visitDate < Constants.MINDATE) {
-            throw new IllegalArgumentException();
-        }
+        checkSum(visitDate > Constants.MAXDATE || visitDate < Constants.MINDATE);
     }
 
     private static List<String> replaceStringToName(String order) {
         return Arrays.stream(order.replaceAll(delimeterPattern, ",").split(","))
                 .collect(Collectors.toList());
+    }
+
+    public static List<Integer> replaceStringToCount(String order) {
+        return Arrays.stream(order.replaceAll(delimeterNamePattern, ",").split(","))
+                .filter(s -> !s.equals(""))
+                .map(Integer::parseInt).collect(Collectors.toList());
     }
 
 }
