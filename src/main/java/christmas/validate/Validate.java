@@ -67,16 +67,12 @@ public class Validate {
         List<String> menuName = replaceStringToName(order);
         try {
             for (String input : menuName) {
-                checkMenu(input);
+                check(Arrays.stream(Menu.values()).anyMatch(Menu -> Menu.getName().equals(input)));
             }
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
         }
-    }
-
-    private static void checkMenu(String menuName) {
-        check(Arrays.stream(Menu.values()).anyMatch(n -> n.name().equals(menuName)));
     }
 
     public static void visitDateValidate(int visitDate) {

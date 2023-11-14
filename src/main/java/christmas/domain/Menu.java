@@ -20,7 +20,7 @@ public enum Menu {
     TAPAS("타파스", 5500, "appetizer"),
     SALAD("시저샐러드", 8000, "appetizer"),
 
-    NONE("없음", 0);
+    NONE("없음", 0, "none");
 
     private String name;
     private int price;
