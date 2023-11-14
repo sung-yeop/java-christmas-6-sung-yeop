@@ -2,6 +2,7 @@ package christmas.model;
 
 import christmas.domain.DesertMenu;
 import christmas.domain.DrinkMenu;
+import christmas.domain.Order;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

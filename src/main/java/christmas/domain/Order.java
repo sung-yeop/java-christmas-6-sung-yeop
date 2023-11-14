@@ -1,9 +1,4 @@
-package christmas.model;
-
-import christmas.domain.Appetizer;
-import christmas.domain.DesertMenu;
-import christmas.domain.DrinkMenu;
-import christmas.domain.MainMenu;
+package christmas.domain;
 
 import java.util.Map;
 
