@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class OutputView {
 
+    private final static String previewMessage = "12월 3일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!\n";
     private final static String menuOutput = "<주문 메뉴>";
     private final static String menuOutputFormat = "%s %d개\n";
     private final static String amountOutput = "<할인 전 총주문 금액>";
@@ -25,7 +26,11 @@ public class OutputView {
     private final static int bonusMenuCount = 1;
     private DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-    public void viewMenuOutput(Map<String, Integer> orderMenu) {
+    public void viewPreviewMessage() {
+        System.out.println(previewMessage);
+    }
+
+    public void viewMenuOutput(Map<Menu, Integer> orderMenu) {
         System.out.println(menuOutput);
         String menuOutput = orderMenu.keySet().stream().map(k -> String.format(menuOutputFormat, k, orderMenu.get(k)))
                 .collect(Collectors.joining());
