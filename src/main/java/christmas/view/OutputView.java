@@ -1,8 +1,9 @@
 package christmas.view;
 
-import christmas.domain.DrinkMenu;
+import christmas.domain.Badge;
+import christmas.domain.Menu;
 
-import java.util.List;
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,14 +17,13 @@ public class OutputView {
     private final static String bonusMenuOutputFormatTrue = "%s %d개\n";
     private final static String OutputFormatNone = "%s\n";
     private final static String benefitOutput = "<혜택 내역>";
-    private final static String benefitOutputFormatTrue = "크리스마스 디데이 할인: -%s원\n" + "평일 할인: -%s원\n" +
-            "특별 할인: -%s원\n" + "증정 이벤트: -%s원\n";
     private final static String allBenefitAmount = "<총혜택 금액>";
     private final static String amountOfPayment = "<할인 후 예상 결제 금액>";
     private final static String amountFormat = "-%s원\n";
-    private final static String badge = "<12월 이벤트 배지>";
-
+    private final static String badgeOutput = "<12월 이벤트 배지>";
+    private final static String benefitOutputFormat = "%s: -%s원\n";
     private final static int bonusMenuCount = 1;
+    private DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
     public void viewMenuOutput(Map<String, Integer> orderMenu) {
         System.out.println(menuOutput);
@@ -32,49 +32,52 @@ public class OutputView {
         System.out.println(menuOutput);
     }
 
-    public void viewOrderAmountOutput(String amount) {
+    public void viewOrderAmountOutput(int amount) {
         System.out.println(amountOutput);
-        System.out.println(String.format(amountOutputFormat, amount));
+        System.out.println(String.format(amountOutputFormat, decimalFormat.format(amount)));
     }
 
     public void viewBonusMenuOutput(boolean bonus) {
         System.out.println(bonusMenuOutput);
         if (bonus) {
-            System.out.println(String.format(bonusMenuOutputFormatTrue, DrinkMenu.CHAMPAGNE.getName(), bonusMenuCount));
+            System.out.println(String.format(bonusMenuOutputFormatTrue, Menu.CHAMPAGNE.getName(), bonusMenuCount));
         }
         if (!bonus) {
-            System.out.println(String.format(OutputFormatNone, DrinkMenu.NONE.getName()));
+            System.out.println(String.format(OutputFormatNone, Menu.NONE.getName()));
         }
     }
 
-    public void viewBenefitOutput(boolean benefit, List<String> discount) {
+    public void viewBenefitOutput(boolean benefit, Map<String, Integer> discountTotal) {
         System.out.println(benefitOutput);
+        String out = "";
         if (benefit) {
-            System.out.println(String.format(benefitOutputFormatTrue,
-                    discount.get(0), discount.get(1), discount.get(2), discount.get(3)));
+            for (String input : discountTotal.keySet()) {
+                out += String.format(benefitOutputFormat, input, decimalFormat.format(discountTotal.get(input)));
+            }
+            System.out.println(out);
         }
         if (!benefit) {
-            System.out.println(String.format(OutputFormatNone, DrinkMenu.NONE.getName()));
+            System.out.println(String.format(OutputFormatNone, Menu.NONE.getName()));
         }
     }
 
-    public void viewAllBenefitAmount(boolean benefit, String amount) {
+    public void viewAllBenefitAmount(boolean benefit, int amount) {
         System.out.println(allBenefitAmount);
         if (benefit) {
-            System.out.println(String.format(amountFormat, amount));
+            System.out.println(String.format(amountFormat, decimalFormat.format(amount)));
         }
         if (!benefit) {
             System.out.println(String.format(amountFormat, "0"));
         }
     }
 
-    public void viewAmountOfPayment(String payment) {
+    public void viewAmountOfPayment(int payment) {
         System.out.println(amountOfPayment);
-        System.out.println(String.format(amountFormat, payment));
+        System.out.println(String.format(amountFormat, decimalFormat.format(payment)));
     }
 
-    public void viewBadge(String badgeName) {
-        System.out.println(badge);
-        System.out.println(badgeName);
+    public void viewBadge(Badge badgeName) {
+        System.out.println(badgeOutput);
+        System.out.println(badgeName.getName());
     }
 }
