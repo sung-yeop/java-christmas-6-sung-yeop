@@ -1,10 +1,7 @@
 package christmas.validate;
 
 import christmas.constants.Constants;
-import christmas.domain.Appetizer;
-import christmas.domain.DesertMenu;
-import christmas.domain.DrinkMenu;
-import christmas.domain.MainMenu;
+import christmas.domain.Menu;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +19,7 @@ public class Validate {
 
     public static void integerTypeValidate(String number) {
         try {
-            checkSum(!number.matches(integerPattern));
+            check(number.matches(integerPattern));
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
@@ -44,7 +41,7 @@ public class Validate {
     public static void menuDuplicationValidate(String order) {
         List<String> menuName = replaceStringToName(order);
         try {
-            checkSum(menuName.stream().distinct().collect(Collectors.toList()).size() != menuName.size());
+            check(menuName.stream().distinct().collect(Collectors.toList()).size() == menuName.size());
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
@@ -52,29 +49,18 @@ public class Validate {
     }
 
     public static void menuOrderNumberValidate(String order) {
-        List<Integer> orderNumbers = replaceStringToCount(order);
-        int sum = 0;
         try {
-            for (Integer orderNumber : orderNumbers) {
-                sum += orderNumber;
-                checkNumber(orderNumber);
-            }
-            checkSum(sum > MENUMAXCOUNT);
-
+            check(replaceStringToCount(order).stream().mapToInt(Integer::intValue).sum() <= MENUMAXCOUNT);
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
         }
     }
 
-    private static void checkSum(boolean sum) {
-        if (sum) {
+    private static void check(boolean validate) {
+        if (!validate) {
             throw new IllegalArgumentException();
         }
-    }
-
-    private static void checkNumber(Integer orderNumber) {
-        checkSum(orderNumber < MIN);
     }
 
     public static void menuValidate(String order) {
@@ -90,21 +76,16 @@ public class Validate {
     }
 
     private static void checkMenu(String menuName) {
-        checkSum(Appetizer.getPriceWithName(menuName) == 0 && DesertMenu.getPriceWithName(menuName) == 0
-                && DrinkMenu.getPriceWithName(menuName) == 0 && MainMenu.getPriceWithName(menuName) == 0);
+        check(Arrays.stream(Menu.values()).anyMatch(n -> n.name().equals(menuName)));
     }
 
     public static void visitDateValidate(int visitDate) {
         try {
-            checkVisitDate(visitDate);
+            check(visitDate <= Constants.MAXDATE && visitDate >= Constants.MINDATE);
         } catch (IllegalArgumentException e) {
             System.out.println(errorMessage);
             throw new IllegalArgumentException();
         }
-    }
-
-    private static void checkVisitDate(int visitDate) {
-        checkSum(visitDate > Constants.MAXDATE || visitDate < Constants.MINDATE);
     }
 
     private static List<String> replaceStringToName(String order) {
