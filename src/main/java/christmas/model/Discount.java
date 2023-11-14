@@ -5,6 +5,7 @@ import christmas.domain.Menu;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class Discount {
     private final static String bonusEvent = "증정 이벤트";
 
     public Map<String, Integer> discountTotal(int date, Map<Menu, Integer> orderMenu, int payAmount) {
-        Map<String, Integer> discount = new HashMap<>();
+        Map<String, Integer> discount = new LinkedHashMap<>();
         int discountDayAmount = getDiscountDayAmount(date, orderMenu);
 
         discount.put(christmasDayDiscount, discountChristmas(date));
