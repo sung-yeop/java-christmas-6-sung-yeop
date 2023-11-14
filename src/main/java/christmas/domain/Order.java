@@ -5,9 +5,9 @@ import java.util.Map;
 public class Order {
 
     private int orderDate;
-    private Map<String, Integer> orderMenu;
+    private Map<Menu, Integer> orderMenu;
 
-    public Order(int orderDate, Map<String, Integer> orderMenu) {
+    public Order(int orderDate, Map<Menu, Integer> orderMenu) {
         this.orderDate = orderDate;
         this.orderMenu = orderMenu;
     }
@@ -16,26 +16,15 @@ public class Order {
         return orderDate;
     }
 
-    public Map<String, Integer> getOrderMenu() {
+    public Map<Menu, Integer> getOrderMenu() {
         return orderMenu;
     }
 
     public int orderAmount() {
-        int amount = 0;
-        for (String input : orderMenu.keySet()) {
-            amount += menuPrice(input) * orderMenu.get(input);
+        int result = 0;
+        for (Menu menu : orderMenu.keySet()) {
+            result += Menu.getPriceWithName(menu.getName()) * orderMenu.get(menu);
         }
-        return amount;
+        return result;
     }
-
-    private int menuPrice(String key) {
-        int amount = 0;
-        amount += Appetizer.getPriceWithName(key);
-        amount += DesertMenu.getPriceWithName(key);
-        amount += DrinkMenu.getPriceWithName(key);
-        amount += MainMenu.getPriceWithName(key);
-        return amount;
-    }
-
-
 }

@@ -1,7 +1,6 @@
 package christmas.model;
 
-import christmas.domain.DesertMenu;
-import christmas.domain.DrinkMenu;
+import christmas.domain.Menu;
 import christmas.domain.Order;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,17 +17,15 @@ class OrderTest {
 
     @BeforeEach
     void setOrder() {
-        Map<String, Integer> orderMenu = new HashMap<>();
-        orderMenu.put("초코케이크", 3);
-        orderMenu.put("샴페인", 5);
+        Map<Menu, Integer> orderMenu = new HashMap<>();
+        orderMenu.put(Menu.CAKE, 3);
+        orderMenu.put(Menu.CHAMPAGNE, 5);
         order = new Order(weekend, orderMenu);
     }
 
     @Test
     void 할인_전_구입_금액_반환() {
         Assertions.assertThat(order.orderAmount())
-                .isEqualTo(DesertMenu.CAKE.getPrice() * 3 + DrinkMenu.CHAMPAGNE.getPrice() * 5);
+                .isEqualTo(45000 + 125000);
     }
-
-
 }
