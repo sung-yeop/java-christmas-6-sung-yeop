@@ -1,6 +1,6 @@
 package christmas.model;
 
-import christmas.domain.DrinkMenu;
+import christmas.domain.Menu;
 
 import java.util.Map;
 
@@ -16,14 +16,14 @@ public class Condition {
         return false;
     }
 
-    public boolean checkEventConditionMenu(Map<String, Integer> orderMenu) {
-        if (orderMenu.keySet().stream().filter(DrinkMenu::checkMenu).allMatch(b -> b.equals(true))) {
+    public boolean checkEventConditionMenu(Map<Menu, Integer> orderMenu) {
+        if (orderMenu.keySet().stream().allMatch(menu -> Menu.isOnlyDrinkMenu(menu.getName()))) {
             return false;
         }
         return true;
     }
 
-    public boolean checkEventConditionMenuCount(Map<String, Integer> orderMenu) {
+    public boolean checkEventConditionMenuCount(Map<Menu, Integer> orderMenu) {
         if (orderMenu.values().stream().mapToInt(Integer::intValue).sum() > ORDERCOUNTCONDITION) {
             return false;
         }

@@ -51,6 +51,7 @@ public enum Menu {
 
     // Drink만 포함된 메뉴가 아니면 True
     public static boolean isOnlyDrinkMenu(String name) {
-        return Arrays.stream(Menu.values()).anyMatch(Menu -> !Menu.type.equals("drink"));
+        return Arrays.stream(Menu.values()).filter(n -> n.getName().equals(name))
+                .allMatch(n -> n.getType().equals("drink"));
     }
 }

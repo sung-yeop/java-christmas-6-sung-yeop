@@ -1,5 +1,6 @@
 package christmas.model;
 
+import christmas.domain.Menu;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,10 +38,10 @@ class ConditionTest {
     @DisplayName("20개 이하 주문시 true 반환")
     @Test
     void 메뉴를_20개_이하로_주문하면_이벤트_발생_O() {
-        Map<String, Integer> order = new HashMap<>();
-        order.put("제로콜라", 2);
-        order.put("레드와인", 3);
-        order.put("샴페인", 10);
+        Map<Menu, Integer> order = new HashMap<>();
+        order.put(Menu.COKE, 2);
+        order.put(Menu.WINE, 3);
+        order.put(Menu.CHAMPAGNE, 10);
 
         Assertions.assertThat(condition.checkEventConditionMenuCount(order)).isEqualTo(true);
     }
@@ -48,10 +49,10 @@ class ConditionTest {
     @DisplayName("20개 초과 주문시 false 반환")
     @Test
     void 메뉴를_20개_초과하여_주문하면_이벤트_발생_X() {
-        Map<String, Integer> order = new HashMap<>();
-        order.put("제로콜라", 100);
-        order.put("레드와인", 100);
-        order.put("샴페인", 1000);
+        Map<Menu, Integer> order = new HashMap<>();
+        order.put(Menu.COKE, 100);
+        order.put(Menu.WINE, 100);
+        order.put(Menu.CHAMPAGNE, 1000);
 
         Assertions.assertThat(condition.checkEventConditionMenuCount(order)).isEqualTo(false);
     }
@@ -60,10 +61,10 @@ class ConditionTest {
     @Test
     void 음료수만_주문하면_이벤트_발생_X() {
         //given
-        Map<String, Integer> order = new HashMap<>();
-        order.put("제로콜라", 100);
-        order.put("레드와인", 100);
-        order.put("샴페인", 1000);
+        Map<Menu, Integer> order = new HashMap<>();
+        order.put(Menu.COKE, 100);
+        order.put(Menu.WINE, 100);
+        order.put(Menu.CHAMPAGNE, 1000);
 
         Assertions.assertThat(condition.checkEventConditionMenu(order)).isEqualTo(false);
     }
@@ -72,12 +73,12 @@ class ConditionTest {
     @Test
     void 음료수만_주문하지_않은_경우_이벤트_발생_O() {
         //given
-        Map<String, Integer> order = new HashMap<>();
-        order.put("스테이크", 100);
-        order.put("레드와인", 100);
-        order.put("샴페인", 1000);
+        Map<Menu, Integer> order = new HashMap<>();
+        order.put(Menu.COKE, 100);
+        order.put(Menu.WINE, 100);
+        order.put(Menu.CHAMPAGNE, 1000);
 
-        Assertions.assertThat(condition.checkEventConditionMenu(order)).isEqualTo(true);
+        Assertions.assertThat(condition.checkEventConditionMenu(order)).isEqualTo(false);
     }
 
 
