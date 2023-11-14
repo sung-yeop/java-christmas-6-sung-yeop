@@ -1,6 +1,7 @@
 package christmas.model;
 
 import christmas.domain.Menu;
+import christmas.domain.Order;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,12 +17,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DiscountTest {
 
     private static final int HOLIDAYDISCOUNT = 1000;
-
     private Discount discount;
 
     @BeforeEach
     void setDiscount() {
         discount = new Discount();
+    }
+
+    @DisplayName("혜택 증정 내역 확인 / 24일 공휴일")
+    @Test
+    void 총_할인_내역을_정리한_맵_생성_테스트() {
+        Map<Menu, Integer> orderMenu = new HashMap<>();
+        orderMenu.put(Menu.CAKE, 3);
+        orderMenu.put(Menu.CHAMPAGNE, 5);
+        Order order = new Order(24, orderMenu);
+
+        Map<String, Integer> TotalDiscount = discount.discountTotal(
+                order.getOrderDate(), order.getOrderMenu(), order.orderAmount());
+
+        Assertions.assertThat(TotalDiscount).containsEntry("특별 할인", 1000);
+        Assertions.assertThat(TotalDiscount).doesNotContainKey("주말 할인");
     }
 
     @DisplayName("12월 1일부터 하루가 지날때마다 1000원 + 100원씩 할인")
