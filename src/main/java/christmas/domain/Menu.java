@@ -44,6 +44,11 @@ public enum Menu {
         this.type = type;
     }
 
+    public static Menu getMenuWithName(String menuName) {
+        return Arrays.stream(Menu.values())
+                .filter(menu -> menu.getName().equals(menuName)).findAny().get();
+    }
+
     public static int getPriceWithName(String name) {
         return Arrays.stream(Menu.values()).filter(Menu -> Menu.name.equals(name)).findAny()
                 .orElse(NONE).getPrice();

@@ -1,9 +1,7 @@
 package christmas.model;
 
-import christmas.domain.DesertMenu;
-import christmas.domain.DrinkMenu;
 import christmas.domain.Holiday;
-import christmas.domain.MainMenu;
+import christmas.domain.Menu;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,9 +19,13 @@ public class Discount {
     private final static int NOTDISCOUNT = 0;
     private final static int CHAMPAGNEEVENT = 120000;
 
+    public void discountTotal(int date, Map<String, Integer> orderMenu) {
+
+    }
+
     public String eventChampagne(int orderAmount) {
         if (orderAmount >= CHAMPAGNEEVENT) {
-            return DrinkMenu.CHAMPAGNE.getName();
+            return Menu.CHAMPAGNE.getName();
         }
         return null;
     }
@@ -43,8 +45,8 @@ public class Discount {
         return result;
     }
 
-    public Map<String, Integer> discountDay(int date) {
-        Map<String, Integer> result = null;
+    public Map<Menu, Integer> discountDay(int date) {
+        Map<Menu, Integer> result = null;
 
         if (!discountWeekday(date).isEmpty()) {
             result = discountWeekday(date);
@@ -59,29 +61,30 @@ public class Discount {
         return result;
     }
 
-    private Map<String, Integer> discountWeekday(int date) {
-        Map<String, Integer> result = new HashMap<>();
-        if (date % PERIOD != 2 && date % PERIOD != 3) {
-            result = Arrays.stream(DesertMenu.values()).filter(DesertMenu -> DesertMenu != DesertMenu.NONE)
-                    .collect(Collectors.toMap(DesertMenu::getName, DesertMenu::getPrice));
+    private Map<Menu, Integer> discountWeekday(int date) {
+        Map<Menu, Integer> result = new HashMap<>();
+        if (date % PERIOD != 1 && date % PERIOD != 2) {
+            result = Arrays.stream(Menu.values()).filter(menu -> menu != menu.NONE)
+                    .filter(menu -> !menu.getType().equals("desert"))
+                    .collect(Collectors.toMap(menu -> Menu.getMenuWithName(menu.getName()), Menu::getPrice));
         }
 
-        for (String input : result.keySet()) {
-            result.replace(input, result.get(input) - DISCOUNT);
+        for (Menu menu : result.keySet()) {
+            result.put(menu, result.get(menu) - DISCOUNT);
         }
 
         return result;
     }
 
-    private Map<String, Integer> discountHoliday(int date) {
-        Map<String, Integer> result = new HashMap<>();
-        if (date % PERIOD == 2 || date % PERIOD == 3) {
-            result = Arrays.stream(MainMenu.values()).filter(MainMenu -> MainMenu != MainMenu.NONE)
-                    .collect(Collectors.toMap(MainMenu::getName, MainMenu::getPrice));
+    private Map<Menu, Integer> discountHoliday(int date) {
+        Map<Menu, Integer> result = new HashMap<>();
+        if (date % PERIOD == 1 || date % PERIOD == 2) {
+            result = Arrays.stream(Menu.values()).filter(menu -> menu != menu.NONE)
+                    .collect(Collectors.toMap(menu -> Menu.getMenuWithName(menu.getName()), Menu::getPrice));
         }
 
-        for (String input : result.keySet()) {
-            result.replace(input, result.get(input) - DISCOUNT);
+        for (Menu menu : result.keySet()) {
+            result.put(menu, result.get(menu) - DISCOUNT);
         }
 
         return result;
