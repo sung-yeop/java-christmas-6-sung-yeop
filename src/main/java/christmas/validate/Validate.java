@@ -15,13 +15,15 @@ public class Validate {
     private static final String integerPattern = "([0-9]*)";
     private static final String delimeterPattern = "(-[0-9]*.)";
     private static final String delimeterNamePattern = "(.[가-힣]+-)";
+    private static final String mentionErrorDate = " 유효하지 않은 날짜입니다. 다시 입력해 주세요.";
+    private static final String mentionErrorMenu = " 유효하지 않은 주문입니다. 다시 입력해 주세요.";
 
 
     public static void integerTypeValidate(String number) {
         try {
             check(number.matches(integerPattern));
         } catch (IllegalArgumentException e) {
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + mentionErrorDate);
             throw new IllegalArgumentException();
         }
     }
@@ -33,7 +35,7 @@ public class Validate {
                 throw new IllegalArgumentException();
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + mentionErrorMenu);
             throw new IllegalArgumentException();
         }
     }
@@ -43,7 +45,7 @@ public class Validate {
         try {
             check(menuName.stream().distinct().collect(Collectors.toList()).size() == menuName.size());
         } catch (IllegalArgumentException e) {
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + mentionErrorMenu);
             throw new IllegalArgumentException();
         }
     }
@@ -52,7 +54,7 @@ public class Validate {
         try {
             check(replaceStringToCount(order).stream().mapToInt(Integer::intValue).sum() <= MENUMAXCOUNT);
         } catch (IllegalArgumentException e) {
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + mentionErrorMenu);
             throw new IllegalArgumentException();
         }
     }
@@ -70,7 +72,7 @@ public class Validate {
                 check(Arrays.stream(Menu.values()).anyMatch(Menu -> Menu.getName().equals(input)));
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + mentionErrorMenu);
             throw new IllegalArgumentException();
         }
     }
@@ -79,7 +81,7 @@ public class Validate {
         try {
             check(visitDate <= Constants.MAXDATE && visitDate >= Constants.MINDATE);
         } catch (IllegalArgumentException e) {
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + mentionErrorDate);
             throw new IllegalArgumentException();
         }
     }
