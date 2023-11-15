@@ -27,6 +27,11 @@ public class Discount {
 
     public Map<String, Integer> discountTotal(int date, Map<Menu, Integer> orderMenu, int payAmount) {
         Map<String, Integer> discountResult = new LinkedHashMap<>();
+        discountInput(date, orderMenu, payAmount, discountResult);
+        return discountResult;
+    }
+
+    private void discountInput(int date, Map<Menu, Integer> orderMenu, int payAmount, Map<String, Integer> discountResult) {
         if (discountChristmas(date) != 0) {
             discountResult.put(christmasDayDiscount, discountChristmas(date));
         }
@@ -39,7 +44,6 @@ public class Discount {
         if (eventChampagne(payAmount)) {
             discountResult.put(bonusEvent, Menu.CHAMPAGNE.getPrice());
         }
-        return discountResult;
     }
 
     public int discountTotalAmount(Map<String, Integer> discountTotal) {
