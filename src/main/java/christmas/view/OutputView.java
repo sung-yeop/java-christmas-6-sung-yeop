@@ -24,6 +24,7 @@ public class OutputView {
     private final static String amountFormat = "%s원\n";
     private final static String badgeOutput = "<12월 이벤트 배지>";
     private final static String benefitOutputFormat = "%s: -%s원\n";
+    private final static String notBenefitAmount = "0원\n";
     private final static int bonusMenuCount = 1;
     private DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
@@ -53,18 +54,17 @@ public class OutputView {
         }
     }
 
-    public void viewBenefitOutput(boolean benefit, Map<String, Integer> discountTotal) {
+    public void viewBenefitOutput(Map<String, Integer> discountTotal) {
         System.out.println(benefitOutput);
         String out = "";
-        if (benefit) {
+        if (discountTotal.keySet().stream().filter(key -> discountTotal.get(key) != 0).count() != 0) {
             for (String input : discountTotal.keySet()) {
                 out += String.format(benefitOutputFormat, input, decimalFormat.format(discountTotal.get(input)));
             }
             System.out.println(out);
+            return;
         }
-        if (!benefit) {
-            System.out.println(String.format(OutputFormatNone, Menu.NONE.getName()));
-        }
+        System.out.println(Menu.NONE.getName() + "\n");
     }
 
     public void viewAllBenefitAmount(boolean benefit, int amount) {
@@ -73,7 +73,7 @@ public class OutputView {
             System.out.println(String.format(amountDiscountFormat, decimalFormat.format(amount)));
         }
         if (!benefit) {
-            System.out.println(String.format(amountDiscountFormat, "0"));
+            System.out.println(notBenefitAmount);
         }
     }
 
