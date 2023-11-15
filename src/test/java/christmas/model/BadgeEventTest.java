@@ -1,5 +1,6 @@
 package christmas.model;
 
+import christmas.domain.Badge;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +22,9 @@ class BadgeEventTest {
         int tree = 10000;
         int star = 6000;
 
-        Assertions.assertEquals(badgeEvent.giveBadge(santa), "산타");
-        Assertions.assertEquals(badgeEvent.giveBadge(tree), "트리");
-        Assertions.assertEquals(badgeEvent.giveBadge(star), "별");
+        Assertions.assertEquals(badgeEvent.giveBadge(santa), Badge.SANTA);
+        Assertions.assertEquals(badgeEvent.giveBadge(tree), Badge.TREE);
+        Assertions.assertEquals(badgeEvent.giveBadge(star), Badge.STAR);
     }
 
 

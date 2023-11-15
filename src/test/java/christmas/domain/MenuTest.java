@@ -1,16 +1,8 @@
 package christmas.domain;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MenuTest {
 
@@ -20,11 +12,11 @@ class MenuTest {
     private static final String MainMenuNameTest = "티본스테이크";
 
     @Test
-    void 이름으로_가격_가져오기_테스트(){
-        assertThat(Appetizer.getPriceWithName(AppetizerNameTest)).isEqualTo(Appetizer.TAPAS.getPrice());
-        assertThat(DesertMenu.getPriceWithName(DesertMenuNameTest)).isEqualTo(DesertMenu.CAKE.getPrice());
-        assertThat(DrinkMenu.getPriceWithName(DrinkMenuNameTest)).isEqualTo(DrinkMenu.COKE.getPrice());
-        assertThat(MainMenu.getPriceWithName(MainMenuNameTest)).isEqualTo(MainMenu.STAKE.getPrice());
+    void 이름으로_가격_가져오기_테스트() {
+        assertThat(Menu.getPriceWithName(AppetizerNameTest)).isEqualTo(Menu.TAPAS.getPrice());
+        assertThat(Menu.getPriceWithName(DesertMenuNameTest)).isEqualTo(Menu.CAKE.getPrice());
+        assertThat(Menu.getPriceWithName(DrinkMenuNameTest)).isEqualTo(Menu.COKE.getPrice());
+        assertThat(Menu.getPriceWithName(MainMenuNameTest)).isEqualTo(Menu.STAKE.getPrice());
     }
 
 
