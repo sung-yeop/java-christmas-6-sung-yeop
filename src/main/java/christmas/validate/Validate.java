@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class Validate {
     private static final String errorMessage = "[ERROR]";
-    private static final int MIN = 1;
+    private static final String COMMA = ",";
     private static final int MENUMAXCOUNT = 20;
     private static final String menuInputPattern = "(([가-힣]*)-[0-9]*)";
     private static final String integerPattern = "([0-9]*)";
@@ -37,7 +37,7 @@ public class Validate {
     }
 
     public static void menuFormatValidate(String order) {
-        List<String> orderList = Arrays.stream(order.split(",")).toList();
+        List<String> orderList = Arrays.stream(order.split(COMMA)).toList();
         try {
             if (!orderList.stream().allMatch(s -> s.matches(menuInputPattern))) {
                 throw new IllegalArgumentException();

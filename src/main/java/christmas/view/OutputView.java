@@ -26,6 +26,7 @@ public class OutputView {
     private final static String benefitOutputFormat = "%s: -%s원\n";
     private final static String notBenefitAmount = "0원\n";
     private final static int bonusMenuCount = 1;
+    private final static int ZERO = 0;
     private DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
     public void viewPreviewMessage() {
@@ -57,7 +58,7 @@ public class OutputView {
     public void viewBenefitOutput(Map<String, Integer> discountTotal) {
         System.out.println(benefitOutput);
         String out = "";
-        if (discountTotal.keySet().stream().filter(key -> discountTotal.get(key) != 0).count() != 0) {
+        if (discountTotal.keySet().stream().filter(key -> discountTotal.get(key) != ZERO).count() != ZERO) {
             for (String input : discountTotal.keySet()) {
                 out += String.format(benefitOutputFormat, input, decimalFormat.format(discountTotal.get(input)));
             }
