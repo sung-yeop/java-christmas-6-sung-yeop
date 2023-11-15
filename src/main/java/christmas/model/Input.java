@@ -1,13 +1,13 @@
 package christmas.model;
 
 import camp.nextstep.edu.missionutils.Console;
+import christmas.domain.Menu;
 import christmas.validate.Validate;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Input {
 
@@ -26,7 +26,7 @@ public class Input {
         return Integer.parseInt(input);
     }
 
-    public Map<String, Integer> inputOrderMenu() {
+    public Map<Menu, Integer> inputOrderMenu() {
         String input = Console.readLine();
         try {
             Validate.menuFormatValidate(input);
@@ -39,12 +39,12 @@ public class Input {
         return createOrder(input);
     }
 
-    private Map<String, Integer> createOrder(String input) {
-        Map<String, Integer> result = new HashMap<>();
+    private Map<Menu, Integer> createOrder(String input) {
+        Map<Menu, Integer> result = new LinkedHashMap<>();
         List<String[]> pair = Arrays.stream(input.split(delimeterComma))
-                .map(s -> s.split(delimeterDash)).collect(Collectors.toList());
+                .map(s -> s.split(delimeterDash)).toList();
         for (String[] strings : pair) {
-            result.put(strings[0], Integer.parseInt(strings[1]));
+            result.put(Menu.getMenuWithName(strings[0]), Integer.parseInt(strings[1]));
         }
         return result;
     }
