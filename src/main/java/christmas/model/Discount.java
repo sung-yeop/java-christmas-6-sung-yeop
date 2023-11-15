@@ -1,12 +1,10 @@
 package christmas.model;
 
+import christmas.domain.Badge;
 import christmas.domain.Holiday;
 import christmas.domain.Menu;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Discount {
@@ -25,47 +23,51 @@ public class Discount {
     private final static String specialDiscount = "특별 할인";
     private final static String bonusEvent = "증정 이벤트";
 
-    public Map<String, Integer> discountTotal(int date, Map<Menu, Integer> orderMenu, int payAmount) {
-        Map<String, Integer> discount = new LinkedHashMap<>();
-        int discountDayAmount = getDiscountDayAmount(date, orderMenu);
+    public Badge discountBadge(int discountAmount) {
+        return Arrays.stream(Badge.values()).sorted(Comparator.reverseOrder())
+                .filter(badge -> badge.getCutLine() < discountAmount).findFirst().get();
+    }
 
-        discount.put(christmasDayDiscount, discountChristmas(date));
-        weekEndOrHolidayDiscount(date, discount, discountDayAmount);
+    public Map<String, Integer> discountTotal(int date, Map<Menu, Integer> orderMenu, int payAmount) {
+        Map<String, Integer> discountResult = new LinkedHashMap<>();
+
+        discountResult.put(christmasDayDiscount, discountChristmas(date));
+        weekEndOrHolidayTotalDiscount(date, discountResult, discountDay(date), orderMenu);
 
         if (discountStar(date) != 0) {
-            discount.put(specialDiscount, discountStar(date));
+            discountResult.put(specialDiscount, discountStar(date));
         }
-        if (eventChampagne(payAmount) != null) {
-            discount.put(bonusEvent, Menu.CHAMPAGNE.getPrice());
+        if (eventChampagne(payAmount)) {
+            discountResult.put(bonusEvent, Menu.CHAMPAGNE.getPrice());
         }
-        return discount;
+        return discountResult;
     }
 
-    private int getDiscountDayAmount(int date, Map<Menu, Integer> orderMenu) {
-        int discountDayAmount = (int) discountDay(date).keySet().stream()
-                .filter(orderMenu.keySet()::equals).count() * DISCOUNT;
-        return discountDayAmount;
+    public int discountTotalAmount(Map<String, Integer> discountTotal) {
+        return discountTotal.values().stream().mapToInt(Integer::intValue).sum();
     }
 
-    private void weekEndOrHolidayDiscount(int date, Map<String, Integer> discount, int discountDayAmount) {
+    public int discountTotalAmountExceptBonus(Map<String, Integer> discountTotal) {
+        return discountTotal.keySet().stream().filter(key -> !key.equals(bonusEvent))
+                .mapToInt(key -> discountTotal.get(key)).sum();
+    }
+
+    public void weekEndOrHolidayTotalDiscount(int date, Map<String, Integer> discountResult,
+                                              List<Menu> discount, Map<Menu, Integer> orderMenu) {
+        int sum = orderMenu.keySet().stream()
+                .filter(menu -> discount.contains(menu)).mapToInt(key -> orderMenu.get(key) * DISCOUNT).sum();
         if (weekOrHoliday(date)) {
-            if (discountDay(date).keySet().stream().anyMatch(key -> key.getType().equals("desert"))) {
-                discount.put(weekendDiscount, discountDayAmount);
-            }
-            discount.put(weekendDiscount, 0);
+            discountResult.put(holidayDiscount, sum);
             return;
         }
-        if (discountDay(date).keySet().stream().anyMatch(key -> key.getType().equals("main"))) {
-            discount.put(holidayDiscount, discountDayAmount);
-        }
-        discount.put(holidayDiscount, 0);
+        discountResult.put(weekendDiscount, sum);
     }
 
-    public String eventChampagne(int orderAmount) {
+    public boolean eventChampagne(int orderAmount) {
         if (orderAmount >= CHAMPAGNEEVENT) {
-            return Menu.CHAMPAGNE.getName();
+            return true;
         }
-        return null;
+        return false;
     }
 
     public int discountStar(int date) {
@@ -83,51 +85,30 @@ public class Discount {
         return result;
     }
 
-    public Map<Menu, Integer> discountDay(int date) {
-        Map<Menu, Integer> result = new HashMap<>();
-
-        if (!discountWeekday(date).isEmpty()) {
-            result = discountWeekday(date);
-            return result;
+    public List<Menu> discountDay(int date) {
+        if (weekOrHoliday(date)) {
+            return discountHoliday();
         }
-        if (!discountHoliday(date).isEmpty()) {
-            result = discountHoliday(date);
-            return result;
-        }
-
-        return result;
+        return discountWeekday();
     }
 
-    //true : 평일 | false : 주말
+    //true : 주말 | false : 평일
     private boolean weekOrHoliday(int date) {
-        if (date % PERIOD != 1 && date % PERIOD != 2) {
+        if (date % 7 == 1 || date % 7 == 2) {
             return true;
         }
         return false;
     }
 
-    private Map<Menu, Integer> discountWeekday(int date) {
-        Map<Menu, Integer> result = new HashMap<>();
-        if (weekOrHoliday(date)) {
-            result = Arrays.stream(Menu.values()).filter(menu -> menu != menu.NONE)
-                    .filter(menu -> !menu.getType().equals("desert"))
-                    .collect(Collectors.toMap(menu -> Menu.getMenuWithName(menu.getName()), Menu::getPrice));
-        }
-        for (Menu menu : result.keySet()) {
-            result.put(menu, result.get(menu) - DISCOUNT);
-        }
-        return result;
+    private List<Menu> discountWeekday() {
+        return Arrays.stream(Menu.values()).filter(menu -> menu != menu.NONE)
+                .filter(menu -> menu.getType().equals("desert"))
+                .collect(Collectors.toList());
     }
 
-    private Map<Menu, Integer> discountHoliday(int date) {
-        Map<Menu, Integer> result = new HashMap<>();
-        if (!weekOrHoliday(date)) {
-            result = Arrays.stream(Menu.values()).filter(menu -> menu != menu.NONE)
-                    .collect(Collectors.toMap(menu -> Menu.getMenuWithName(menu.getName()), Menu::getPrice));
-        }
-        for (Menu menu : result.keySet()) {
-            result.put(menu, result.get(menu) - DISCOUNT);
-        }
-        return result;
+    private List<Menu> discountHoliday() {
+        return Arrays.stream(Menu.values()).filter(menu -> menu != menu.NONE)
+                .filter(menu -> menu.getType().equals("main"))
+                .collect(Collectors.toList());
     }
 }
