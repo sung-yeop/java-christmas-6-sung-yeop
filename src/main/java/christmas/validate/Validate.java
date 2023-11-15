@@ -18,6 +18,14 @@ public class Validate {
     private static final String mentionErrorDate = " 유효하지 않은 날짜입니다. 다시 입력해 주세요.";
     private static final String mentionErrorMenu = " 유효하지 않은 주문입니다. 다시 입력해 주세요.";
 
+    public static void isOnlyDrinkValidate(String order) {
+        List<String> menuName = replaceStringToName(order);
+        try {
+            check(!menuName.stream().allMatch(menu -> Menu.isOnlyDrinkMenu(menu)));
+        } catch (IllegalArgumentException e) {
+            System.out.println(errorMessage + mentionErrorMenu);
+        }
+    }
 
     public static void integerTypeValidate(String number) {
         try {
