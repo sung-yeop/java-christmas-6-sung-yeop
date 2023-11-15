@@ -30,6 +30,7 @@ public class Input {
         String input = Console.readLine();
         try {
             Validate.menuFormatValidate(input);
+            Validate.isOnlyDrinkValidate(input);
             Validate.menuDuplicationValidate(input);
             Validate.menuValidate(input);
             Validate.menuOrderNumberValidate(input);
