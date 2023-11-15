@@ -20,7 +20,8 @@ public class OutputView {
     private final static String benefitOutput = "<혜택 내역>";
     private final static String allBenefitAmount = "<총혜택 금액>";
     private final static String amountOfPayment = "<할인 후 예상 결제 금액>";
-    private final static String amountFormat = "-%s원\n";
+    private final static String amountDiscountFormat = "-%s원\n";
+    private final static String amountFormat = "%s원\n";
     private final static String badgeOutput = "<12월 이벤트 배지>";
     private final static String benefitOutputFormat = "%s: -%s원\n";
     private final static int bonusMenuCount = 1;
@@ -32,7 +33,7 @@ public class OutputView {
 
     public void viewMenuOutput(Map<Menu, Integer> orderMenu) {
         System.out.println(menuOutput);
-        String menuOutput = orderMenu.keySet().stream().map(k -> String.format(menuOutputFormat, k, orderMenu.get(k)))
+        String menuOutput = orderMenu.keySet().stream().map(k -> String.format(menuOutputFormat, k.getName(), orderMenu.get(k)))
                 .collect(Collectors.joining());
         System.out.println(menuOutput);
     }
@@ -69,10 +70,10 @@ public class OutputView {
     public void viewAllBenefitAmount(boolean benefit, int amount) {
         System.out.println(allBenefitAmount);
         if (benefit) {
-            System.out.println(String.format(amountFormat, decimalFormat.format(amount)));
+            System.out.println(String.format(amountDiscountFormat, decimalFormat.format(amount)));
         }
         if (!benefit) {
-            System.out.println(String.format(amountFormat, "0"));
+            System.out.println(String.format(amountDiscountFormat, "0"));
         }
     }
 
