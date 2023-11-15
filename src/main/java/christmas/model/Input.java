@@ -41,7 +41,7 @@ public class Input {
 
     private Map<Menu, Integer> createOrder(String input) {
         Map<Menu, Integer> result = new LinkedHashMap<>();
-        List<String[]> pair = Arrays.stream(input.split(delimeterComma))
+        List<String[]> pair = Arrays.stream(input.trim().split(delimeterComma))
                 .map(s -> s.split(delimeterDash)).toList();
         for (String[] strings : pair) {
             result.put(Menu.getMenuWithName(strings[0]), Integer.parseInt(strings[1]));
