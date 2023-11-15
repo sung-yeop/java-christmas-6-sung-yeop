@@ -1,10 +1,12 @@
 package christmas.model;
 
-import christmas.domain.Badge;
 import christmas.domain.Holiday;
 import christmas.domain.Menu;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Discount {
@@ -23,17 +25,14 @@ public class Discount {
     private final static String specialDiscount = "특별 할인";
     private final static String bonusEvent = "증정 이벤트";
 
-    public Badge discountBadge(int discountAmount) {
-        return Arrays.stream(Badge.values()).sorted(Comparator.reverseOrder())
-                .filter(badge -> badge.getCutLine() < discountAmount).findFirst().get();
-    }
-
     public Map<String, Integer> discountTotal(int date, Map<Menu, Integer> orderMenu, int payAmount) {
         Map<String, Integer> discountResult = new LinkedHashMap<>();
-
-        discountResult.put(christmasDayDiscount, discountChristmas(date));
-        weekEndOrHolidayTotalDiscount(date, discountResult, discountDay(date), orderMenu);
-
+        if (discountChristmas(date) != 0) {
+            discountResult.put(christmasDayDiscount, discountChristmas(date));
+        }
+        if (discountDay(date).stream().anyMatch(menu -> orderMenu.containsKey(menu))) {
+            weekEndOrHolidayTotalDiscount(date, discountResult, discountDay(date), orderMenu);
+        }
         if (discountStar(date) != 0) {
             discountResult.put(specialDiscount, discountStar(date));
         }
